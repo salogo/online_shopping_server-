@@ -13,7 +13,7 @@ mongoose.connect(process.env.DATABASE, {
    useNewUrlParser: true,
    useCreateIndex: true
 })
-.then(() => console.log("DB Connected"));
+.then(() => console.log("DB is Connected ..."));
 
 //routes middleware
 app.use("/api",userRoutes);
