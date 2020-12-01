@@ -4,6 +4,7 @@ const expressJwt = require("express-jwt");//for autorization check
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const user = require("../models/user");
 
+// signup
 exports.signup = (req, res) => {
     console.log("req.body", req.body);
     const user = new User(req.body);
@@ -22,7 +23,7 @@ exports.signup = (req, res) => {
     
 };
 
-
+// signin
 exports.signin = (req, res) => {
     //find the user based on email
     const { email, password } = req.body;
@@ -49,3 +50,15 @@ exports.signin = (req, res) => {
     });
 };
 
+//signout
+exports.signout = (req, res) => {
+    res.clearCookie("t");
+    res.json({message: "Signout success"})
+}
+
+// protecting routes
+exports.requireSignin = expressJwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ["HS256"], 
+    userProperty: "auth",
+  });
