@@ -56,9 +56,29 @@ exports.signout = (req, res) => {
     res.json({message: "Signout success"})
 }
 
-// protecting routes
+// protecting routes to allow only the signin user
 exports.requireSignin = expressJwt({
     secret: process.env.JWT_SECRET,
     algorithms: ["HS256"], 
     userProperty: "auth",
   });
+
+// Authenticated user
+exports.isAuth = (req, res, next) => {
+    let user = req.profile && req.auth && req.profile._id == req.auth._id;
+    if (!user){
+        return res.status(403).json({
+            error: "Access denied"
+        });
+    }
+    next();
+};
+// Admin
+exports.isAdmin = (req, res, next) => {
+    if (req.profile.role === 0){
+        return res.status(403).json({
+            error: "Admin resource! Access denied"
+        });
+    }
+    next();
+};  
