@@ -30,7 +30,7 @@ app.use(expressValidator());
 //routes middleware
 app.use("/api",authRoutes);
 app.use("/api",userRoutes);
-app.use("api/",categoryRoutes);
+app.use("/api",categoryRoutes);
 
 
 const port = process.env.PORT || 8000
