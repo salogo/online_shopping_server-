@@ -92,6 +92,8 @@ exports.update = (req, res) => {
                 })
             }
         let product = req.product;
+        //using exten methode from lodash it take two arguments
+        // the product and the updated fields
         product = _.extend(product, fields);
         if(files.photo) {  
             if (files.photo.size > 1000000) {
