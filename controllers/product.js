@@ -33,7 +33,7 @@ exports.create = (req, res) => {
            });
        }
            // check for all fields
-           const {name, description,price, category, quantity, shipping} = fields
+           const {name, description,price, category, quantity, shipping} = fields;
            if(! name || !description || !price || !category || !quantity || !shipping) {
                return res.status(400).json({
                    error: "All field are required"
@@ -47,10 +47,10 @@ exports.create = (req, res) => {
                });
            } 
        
-             product.photo.data = fs.readFileSync(files.photo.path)
-             product.photo.contenType = files.photo.type        
+             product.photo.data = fs.readFileSync(files.photo.path);
+             product.photo.contenType = files.photo.type;       
        }
-       product.save(() => {
+       product.save((err, result) => {
            if(err) {
               return res.status(400).json({
                   error: errorHandler(err)
