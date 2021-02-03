@@ -78,46 +78,45 @@ exports.remove = (req, res) => {
     });
 };
 
+
 exports.update = (req, res) => {
-    let form = new formidable.IncomingForm()//to allow any data type
-    form.keepExtensions = true // any data extension 
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
-        if(err) {
+        if (err) {
             return res.status(400).json({
-                error: "Image could not be uploaded"
+                error: 'Image could not be uploaded'
             });
         }
-            // check for all fields
-            const {name, description,price, category, quantity, shipping} = fields
-            if(! name || !description || !price || !category || !quantity || !shipping) {
-                return res.status(400).json({
-                    error: "All field are required"
-                })
-            }
+
         let product = req.product;
-        //using exten methode from lodash it take two arguments
-        // the product and the updated fields
         product = _.extend(product, fields);
-        if(files.photo) {  
+
+        // 1kb = 1000
+        // 1mb = 1000000
+
+        if (files.photo) {
+            // console.log("FILES PHOTO: ", files.photo);
             if (files.photo.size > 1000000) {
                 return res.status(400).json({
-                    error: "Image size must be less than 1mb"
+                    error: 'Image should be less than 1mb in size'
                 });
-            } 
-        
-              product.photo.data = fs.readFileSync(files.photo.path)
-              product.photo.contenType = files.photo.type        
+            }
+            product.photo.data = fs.readFileSync(files.photo.path);
+            product.photo.contentType = files.photo.type;
         }
-        product.save(() => {
-            if(err) {
-               return res.status(400).json({
-                   error: errorHandler(err)
-               });
+
+        product.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
             }
             res.json(result);
         });
     });
- };
+};
+
 
  /**
  * sell / arrival
